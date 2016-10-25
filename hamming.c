@@ -7,6 +7,9 @@
 
 void hamming(char *path,int k,int L);
 int Pow(int);
+int hamming_hash(int k,int L,char number[64],int **,int j);
+
+
 
 int main(int argc, char** argv){
 
@@ -32,6 +35,7 @@ int main(int argc, char** argv){
 	if(k==0){
 		k=4;
 	}
+	printf(" k : %d L : %d \n",k,L);
  	FILE* stream = fopen(path, "r");
 
 	char gramma[50],gramma2[50];
@@ -69,7 +73,11 @@ void hamming(char *path,int k,int L){
 	char g[k][20];
 	//char this[3];
 	char *tuxi1,*tuxi2,*tuxi3,*tuxi4,*tuxi5;
-	int tuxaioi[k][L];
+	int **tuxaioi= malloc (sizeof (int*) * k);
+	for(i=0;i<k;i++){
+		tuxaioi[i]=(int*)malloc(sizeof(int) * L);
+	}
+		
 	char edw;
 
 
@@ -77,7 +85,7 @@ void hamming(char *path,int k,int L){
 
 
 
-	for(i=0;i<5;i++){
+	for(i=0;i<k;i++){
 		memset(g[i], 0, sizeof g[i]);
 	}
 	i=0;
@@ -94,6 +102,7 @@ void hamming(char *path,int k,int L){
 	//printf( "item %s \n",number);
 	mikos=strlen(number);		
 	printf("mikos %d \n",mikos);
+
 	rewind(stream);
 	fscanf(stream,"%s %s ",gramma,gramma2);
 	while(j<L){
@@ -126,7 +135,20 @@ void hamming(char *path,int k,int L){
 		sscanf(buff,"%s %s",item,number);
 		printf( "%s \t",item);
 		printf(" %s \n",number);
-		while(j<L){
+			while(j<L){
+		bucket=hamming_hash(k,L,number,tuxaioi,j);
+			j++;
+		}
+	j=0;
+	}
+	}
+}
+
+int hamming_hash(int k,int L,char number[64],int **tuxaioi,int j){
+	char result[k];
+	int i=0,aut=0,bucket=0;
+	memset(result, 0, sizeof result);
+	//extern int tuxaioi[k][L];
 			while(i<k){	
 
 				result[i]=number[tuxaioi[i][j]];
@@ -137,24 +159,15 @@ void hamming(char *path,int k,int L){
 				i++;
 			};
 			i=0;
-			j++;
 			
 			printf("result %s \n",result);
 			printf("bucket %d \n",bucket);
+			return bucket;
 			bucket=0;
 			aut=0;
 			memset(result, 0, sizeof result);
-		}
-	j=0;
-	}
-	}
+
 	
-
-
-
-
-
-
 
 
 
