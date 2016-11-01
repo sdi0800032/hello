@@ -9,8 +9,8 @@
 #include <math.h>
 #include "hash.h"
 #include "records.h"
-//Function for initializing the hash table
-void initHashtable(int hsize , int L) {
+
+void initHashtable(int hsize , int L) {									// initialize L hashtables of <hsize> buckets of 100 length that increase dynamically
     int i , j;
     BucketArray = malloc(L * sizeof (Bucket ));
     for(i=0; i<L; i++){
@@ -46,7 +46,7 @@ void freememory(int L) {
 	}
 }
 
-int find_bucket_cosine(int id , cos_items_ptr items_ptr , Ri_ptr rptr , int K , int table){
+int find_bucket_cosine(int id , cos_items_ptr items_ptr , Ri_ptr rptr , int K , int table){						// find to which bucket ''belongs'' the given vector
 	int i,j , table_slot , power;
 	double sum;
 	table_slot = 0;
@@ -63,7 +63,7 @@ int find_bucket_cosine(int id , cos_items_ptr items_ptr , Ri_ptr rptr , int K , 
 	return table_slot;
 }
 
-int find_query_bucket_cosine(int id , query_items_ptr qptr  , Ri_ptr rptr , int K , int table , int dimensions){
+int find_query_bucket_cosine(int id , query_items_ptr qptr  , Ri_ptr rptr , int K , int table , int dimensions){		 // find to which bucket ''belongs'' the given vector , applied to queries
 	int i,j , table_slot , power;
 	double sum;
 	table_slot = 0;
@@ -80,7 +80,7 @@ int find_query_bucket_cosine(int id , query_items_ptr qptr  , Ri_ptr rptr , int 
 	return table_slot;
 }
 
-void find_distance_cosine( query_items_ptr qptr , int item , int table , int table_slot , int total_dim){
+void find_distance_cosine( query_items_ptr qptr , int item , int table , int table_slot , int total_dim){					// find the distance between vectors with the  cosine metric
 	double distance , sum , a , b , min;
 	int i,j , item_id= -1;
 	for(j=0; j<BucketArray[table][table_slot]->count; j++){
@@ -98,18 +98,17 @@ void find_distance_cosine( query_items_ptr qptr , int item , int table , int tab
 			distance = sum/(a+b);
 			if(j==0) min = distance ; 		
 			if(distance<= min) {
-//				printf(" new minimal cosine distance between query item %d and vector %d : %f \n" , item , BucketArray[table][table_slot]->bucketarray[j].key , distance);
 				min = distance;
 				item_id = BucketArray[table][table_slot]->bucketarray[j].key;
-				dptr[item].q_distance[table] = min;
-				dptr[item].q_dist_id[table] = item_id;
 				}
 	
 	
 		//}
 	}
+	dptr[item].q_distance[table] = min;
+	dptr[item].q_dist_id[table] = item_id;
+//	printf("minimal cosine distance between query item %d and vector %d : %f \n" , item , dptr[item].q_dist_id[table] , dptr[item].q_distance[table]);
 	
-//	printf("query%d  item%d   dist %f\n", item , item_id ,  dptr[item].q_distance[table]);
 }
 
 int mod (long a, long b)
@@ -256,7 +255,7 @@ int searchHashtable_euclidean(int id ,cos_items_ptr items_ptr , Ri_ptr rptr , in
 	}
 
 
-void bucketentry( vector_ptr vptr , int position , int z,  int table ) {
+void bucketentry( vector_ptr vptr , int position , int z,  int table ) {				// prepare vector to be put in the hashtable
     BucketMember temps;
     temps.v_ptr = malloc(sizeof(struct vectors));
     temps.v_ptr->vector_coords = malloc(sizeof(double) * 100);
@@ -268,7 +267,7 @@ void bucketentry( vector_ptr vptr , int position , int z,  int table ) {
 }
 
 
-void putinbucket(BucketMember temp, int position , int table) {
+void putinbucket(BucketMember temp, int position , int table) {											// put vector in the hashtable
     if (BucketArray[table][position]->count == BucketArray[table][position]->size) {
         BucketArray[table][position]->size *= 2;
         BucketArray[table][position]->bucketarray = realloc(BucketArray[table][position]->bucketarray, BucketArray[table][position]->size * sizeof (BucketMember));
@@ -279,7 +278,7 @@ void putinbucket(BucketMember temp, int position , int table) {
     }
 }
 
-void real_distance(query_items_ptr  qptr , cos_items_ptr items_ptr , FILE *fp , int metric_space){
+void real_distance(query_items_ptr  qptr , cos_items_ptr items_ptr , FILE *fp , int metric_space){		// exantlhtikh 
 	int i,j,z , min_id;
 	double a , b , sum , distance , min;
 	fprintf(fp , "%s" , "\n");

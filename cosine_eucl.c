@@ -85,14 +85,14 @@ void cosine_eucl(char *path , char *query_file , char *output_file , int K , int
 			scanf("%s" , buffer);		
 		}	
 	} 
-	if(metric_space) {
+	if(metric_space) {											// create t for euclidean algorithm
 		tptr = malloc(sizeof(struct random_T) * L );
 		for( i = 0 ; i<L ; i++){
 			tptr[i].t = malloc( sizeof(double) * K) ;
 		}
 		randomr = malloc(sizeof(struct random_r) * L );
 		for( i = 0 ; i<L ; i++){
-			randomr[i].r_euc = malloc( sizeof(long) * K) ;
+			randomr[i].r_euc = malloc( sizeof(long) * K) ;		// create r for euclidean algorithm
 		}
 		
 	}
@@ -111,7 +111,6 @@ void cosine_eucl(char *path , char *query_file , char *output_file , int K , int
 	int min_id;
 	if(!metric_space) {
 		for(table=0; table<L ; table++){
-	//		find_query_buckets_euclidean( qptr , tptr , randomr , ri_coords , table , items_ptr->total_dimensions , K , qptr[0].q_elements ,  hsize );	
 			for(id=0; id<qptr[0].q_elements-1 ; id++){
 				slot = find_query_bucket_cosine( id ,  qptr  , ri_coords ,  K ,  table , items_ptr->total_dimensions);
 				find_distance_cosine(  qptr , id ,  table ,  slot , items_ptr->total_dimensions);
@@ -127,10 +126,11 @@ void cosine_eucl(char *path , char *query_file , char *output_file , int K , int
 		}
 	}
 	fp = fopen( output_file , "w+");
-	for(j=0; j<qptr[0].q_elements - 1; j++){
+	for(j=0; j<qptr[0].q_elements - 1; j++){									// dptr is an array that holds all the min values of the query vectors of the L different hashtables
 		for(i=0; i<L; i++){
 			if(i==0) min = dptr[j].q_distance[i];
 			if(dptr[j].q_distance[i]<= min ) {
+				printf("%f %d\n" , min  , min_id);
 				min = dptr[j].q_distance[i];	
 				min_id = dptr[j].q_dist_id[i];		
 			}

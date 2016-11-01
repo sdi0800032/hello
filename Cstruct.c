@@ -13,7 +13,7 @@
 #define M -1
 #define N 1
 
-cos_items_ptr allocate_space_items( int num ){
+cos_items_ptr allocate_space_items( int num ){					// allocate space for the given vectors in the DATAFILE	
 	cos_items_ptr ptr;
 	int elements , i;
 	if(num>0) elements = num;
@@ -31,7 +31,7 @@ cos_items_ptr allocate_space_items( int num ){
 	return ptr;
 }
 
-Ri_ptr allocate_space_Ri(int K , int dimensions , int L){
+Ri_ptr allocate_space_Ri(int K , int dimensions , int L){			// allocate space for the random vectors that are used in our algorithms
 	int i , j;
 	Ri_ptr rptr;
 	rptr = malloc( L * sizeof(struct R_i));
@@ -122,7 +122,7 @@ void store_Ri_coords( double num , Ri_ptr rptr , int table){
 
 
 void build_Ri( int dimensions , int K , Ri_ptr rptr , cos_items_ptr items_ptr , int elements , int L , vector_ptr vptr , int hsize , int metricspace , double R , random_t_ptr tptr , random_rptr randomr ){
-	double random_value_1 , random_value_2;
+	double random_value_1 , random_value_2;										
 	double r , log_value ;
 	double x_1 , val , sqrt_val;														
 	int i , j , t;
@@ -157,7 +157,7 @@ void build_Ri( int dimensions , int K , Ri_ptr rptr , cos_items_ptr items_ptr , 
 	
 	
 void build_Hi_cosine( cos_items_ptr items_ptr , Ri_ptr rptr , int total_items , int K , int L , vector_ptr vptr , int table){
-	int z , i , j , table_slot , power;
+	int z , i , j , table_slot , power;							// computhe the bucket that belongs the vector with the given algorithm
 	double sum ;
 	for(z=0; z<total_items; z++){
 		table_slot = 0;
@@ -179,7 +179,7 @@ void build_Hi_cosine( cos_items_ptr items_ptr , Ri_ptr rptr , int total_items , 
 	}
 }
     
-double create_t(int w){
+double create_t(int w){													//random t
 	double random_value_1;
 	int A = 0 , B = w;
 	random_value_1 = A + (rand()/(RAND_MAX + 1.0 )) *(B-A);	
